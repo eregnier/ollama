@@ -51,9 +51,12 @@ func TestTQDeviceAccepted(t *testing.T) {
 		{"amd_rdna3_5_gfx1150", "ROCm", 17, true, ""},
 		{"amd_rdna4_gfx1200", "ROCm", 18, true, ""},
 
-		// Non-CUDA/ROCm backends — reject with an informative reason.
+		// Metal is accepted — Apple Silicon SIMD groups are 32-wide, matching
+		// the TQ kernels' __shfl_sync(mask, val, lane, 32) width.
+		{"metal", "Metal", 7, true, ""},
+
+		// Non-CUDA/ROCm/Metal backends — reject with an informative reason.
 		{"vulkan", "Vulkan", 7, false, "Vulkan"},
-		{"metal", "Metal", 7, false, "Metal"},
 		{"sycl", "SYCL", 7, false, "SYCL"},
 		{"empty_library", "", 7, false, "library"},
 	}
